@@ -3,7 +3,7 @@ import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
-    <h1>Home page</h1>
+    <button class="btn btn-success">Home page</button>
     <nav>
         <Link href="/test">Test Page</Link>
         <Link href="/">Home</Link>
