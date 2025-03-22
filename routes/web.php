@@ -20,6 +20,6 @@ Route::post('/user-login', [UserController::class, 'userLogin'])->name('user.log
 
 
 Route::middleware(TokenVerificationMiddleware::class)->group(function () {
-
+    Route::post('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
     Route::get('/test', [TestController::class, 'test']);
 });

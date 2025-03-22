@@ -49,7 +49,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User login successfully!',
-                'token' => $token
+                // 'token' => $token
             ], 200)->cookie('token', $token, 60 * 24 * 30);
         } else {
             return response()->json([
@@ -58,6 +58,13 @@ class UserController extends Controller
             ], 200);
         }
 
+    }
+    public function userLogout(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'User logout successfully!',
+        ], 200)->cookie('token', '', -1);
     }
 
 }

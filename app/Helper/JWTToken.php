@@ -22,14 +22,14 @@ class JWTToken
    {
       try {
          if ($token == null) {
-            return response("unauthorized", 403);
+            return 'unauthorized';
          } else {
             $key = env('JWT_KEY');
             $decode = JWT::decode($token, new Key($key, 'HS256'));
             return $decode;
          }
       } catch (Exception $e) {
-         return response("unauthorized", 403);
+         return 'unauthorized';
       }
    }
 }
