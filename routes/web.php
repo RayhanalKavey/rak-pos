@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenVerificationMiddleware;
@@ -35,10 +36,21 @@ Route::middleware(TokenVerificationMiddleware::class)->group(function () {
     Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('resetPassword');
     //Test routes
     Route::get('/test', [TestController::class, 'test']);
+
     /* --- Category CRUD routes ---*/
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');//C
     Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('category.list');//R
     Route::post('/category-by-id', [CategoryController::class, 'categoryById'])->name('category.ById');//categoryById
     Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');//U
     Route::delete('/delete-category/{id}', [CategoryController::class, 'deleteCategory'])->name('category.delete');//D
+
+    /* --- Product CRUD routes ---*/
+    Route::post('/create-product', [ProductController::class, 'createProduct'])->name('product.create');//C
+    Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list');//R
+    Route::post('/product-by-id', [ProductController::class, 'productById'])->name('product.ById');//productById
+    Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');//U
+    Route::delete('/delete-product/{id}', [ProductController::class, 'deleteProduct'])->name('product.delete');//D
+
+    /* --- Customer CRUD routes ---*/
+
 });
