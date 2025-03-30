@@ -25,7 +25,7 @@ class ProductController extends Controller
                 'user_id' => $user_id,
                 'name' => $request->input('name'),
                 'price' => $request->input('price'),
-                'unit' => $request->input('name'),
+                'unit' => $request->input('unit'),
             ];
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

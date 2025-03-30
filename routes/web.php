@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
@@ -40,17 +42,27 @@ Route::middleware(TokenVerificationMiddleware::class)->group(function () {
     /* --- Category CRUD routes ---*/
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');//C
     Route::get('/list-category', [CategoryController::class, 'listCategory'])->name('category.list');//R
-    Route::post('/category-by-id', [CategoryController::class, 'categoryById'])->name('category.ById');//categoryById
+    Route::post('/category-details', [CategoryController::class, 'categoryById'])->name('category.ById');//categoryById
     Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');//U
     Route::delete('/delete-category/{id}', [CategoryController::class, 'deleteCategory'])->name('category.delete');//D
 
     /* --- Product CRUD routes ---*/
     Route::post('/create-product', [ProductController::class, 'createProduct'])->name('product.create');//C
     Route::get('/list-product', [ProductController::class, 'listProduct'])->name('product.list');//R
-    Route::post('/product-by-id', [ProductController::class, 'productById'])->name('product.ById');//productById
+    Route::post('/product-details', [ProductController::class, 'productById'])->name('product.ById');//productById
     Route::post('/update-product', [ProductController::class, 'updateProduct'])->name('product.update');//U
     Route::delete('/delete-product/{id}', [ProductController::class, 'deleteProduct'])->name('product.delete');//D
 
     /* --- Customer CRUD routes ---*/
+    Route::post('/create-customer', [CustomerController::class, 'createCustomer'])->name('customer.create');//C
+    Route::get('/list-customer', [CustomerController::class, 'listCustomer'])->name('customer.list');//R
+    Route::post('/customer-details', [CustomerController::class, 'customerById'])->name('customer.ById');//customerById
+    Route::post('/update-customer', [CustomerController::class, 'updateCustomer'])->name('customer.update');//U
+    Route::delete('/delete-customer/{id}', [CustomerController::class, 'deleteCustomer'])->name('customer.delete');//D
 
+    /* --- Invoice CRUD routes ---*/
+    Route::post('/create-invoice', [InvoiceController::class, 'createInvoice'])->name('invoice.create');//C
+    Route::get('/list-invoice', [InvoiceController::class, 'listInvoice'])->name('invoice.list');//R
+    Route::post('/invoice-details', [InvoiceController::class, 'invoiceById'])->name('invoice.ById');//invoiceById
+    Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'deleteInvoice'])->name('invoice.delete');//D
 });
