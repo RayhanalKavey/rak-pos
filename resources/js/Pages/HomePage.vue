@@ -1,13 +1,25 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import NavLayout from "../Layouts/NavLayout.vue";
 </script>
 
 <template>
-    <button class="btn btn-success">Home page</button>
-    <nav>
-        <Link href="/test">Test Page</Link>
-        <Link href="/">Home</Link>
-    </nav>
+    <NavLayout>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-6 center-screen">
+                    <div class="card animated fadeIn w-90 p-4">
+                        <div class="card-body">
+                            <h4>Sales Inventory</h4>
+                            <!-- :href="router('login.page')" -->
+                            <Link href="/login" class="btn w-100 btn-success"
+                                >Start
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </NavLayout>
 </template>
-
 <style scoped></style>

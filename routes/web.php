@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\SessionAuthentication;
 use App\Http\Middleware\TokenVerificationMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,19 +27,31 @@ Route::get('/', function () {
     return Inertia::render('HomePage');
 });
 
+Route::get('/login', [UserController::class, 'LoginPage'])->name('login.page');
+Route::get('/registration', [UserController::class, 'RegistrationPage'])->name('registration.page');
+Route::get('/send-otp', [UserController::class, 'SendOTPPage'])->name('sendOTP.page');
+Route::get('/verify-otp', [UserController::class, 'VerifyOTPPage'])->name('VerifyOTP.page');
+
 /* ------ All user user routes (auth) ------ */
 Route::post('/user-registration', [UserController::class, 'userRegistration'])->name('user.registration');
 Route::post('/user-login', [UserController::class, 'userLogin'])->name('user.login');
 Route::post('/send-otp', [UserController::class, 'sendOTP'])->name('sendOTP');
 Route::post('/verify-otp', [UserController::class, 'verifyOTP'])->name('verifyOTP');
 
+//Test routes
+Route::get('/test', [TestController::class, 'test']);
+
+
 /* ------ Logged in routes ------ */
-Route::middleware(TokenVerificationMiddleware::class)->group(function () {
+Route::middleware(SessionAuthentication::class)->group(function () {
+    /* ------- Page routes ------ */
+    Route::get('/dashboard', [DashboardController::class, 'DashboardPage'])->name('dashboard.page');
+    Route::get('/reset-password', [UserController::class, 'resetPasswordPage'])->name('resetPassword.page');
+
+
     // Auth routes
     Route::post('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
     Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('resetPassword');
-    //Test routes
-    Route::get('/test', [TestController::class, 'test']);
 
     /* --- Category CRUD routes ---*/
     Route::post('/create-category', [CategoryController::class, 'createCategory'])->name('category.create');//C
@@ -65,4 +79,8 @@ Route::middleware(TokenVerificationMiddleware::class)->group(function () {
     Route::get('/list-invoice', [InvoiceController::class, 'listInvoice'])->name('invoice.list');//R
     Route::post('/invoice-details', [InvoiceController::class, 'invoiceById'])->name('invoice.ById');//invoiceById
     Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'deleteInvoice'])->name('invoice.delete');//D
+
+    /* --- Dashboard summary ---*/
+    Route::get('/dashboard-summary', [DashboardController::class, 'dashboardSummary'])->name('dashboard.summary');
+
 });

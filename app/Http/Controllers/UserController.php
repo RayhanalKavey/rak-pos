@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -45,16 +46,25 @@ class UserController extends Controller
         // dd($request->all());
         $count = User::where('email', $request->input('email'))->select('id', 'password')->first();
         if ($count !== null && Hash::check($request->input('password'), $count->password)) {
-            $token = JWTToken::createToken($request->input('email'), $count->id);
-            return response()->json([
-                'status' => true,
-                'message' => 'User login successfully!',
-            ], 200)->cookie('token', $token, 60 * 24 * 30);
+            // $token = JWTToken::createToken($request->input('email'), $count->id);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'User login successfully!',
+            // ], 200)->cookie('token', $token, 60 * 24 * 30);
+
+            $email = $request->input('email');
+            $user_id = $count->id;
+            $request->session()->put('email', $email);
+            $request->session()->put('user_id', $user_id);
+            $data = ['message' => 'Login successful', 'status' => true, 'error' => ''];
+            return redirect('/dashboard')->with($data);
         } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'unauthorized',
-            ], 200);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => 'unauthorized',
+            // ], 200);
+            $data = ['message' => 'Login failed', 'status' => false, 'error' => ''];
+            return redirect('/login')->with($data);
         }
 
     }
@@ -131,5 +141,31 @@ class UserController extends Controller
             ], 403);
         }
     }
+
+    public function LoginPage(Request $request)
+    {
+        return Inertia::render('LoginPage');
+    }
+
+    public function RegistrationPage(Request $request)
+    {
+        return Inertia::render('RegistrationPage');
+    }
+
+    public function SendOTPPage(Request $request)
+    {
+        return Inertia::render('SendOTPPage');
+    }
+
+    public function VerifyOTPPage(Request $request)
+    {
+        return Inertia::render('VerifyOTPPage');
+    }
+
+    public function ResetPasswordPage(Request $request)
+    {
+        return Inertia::render('ResetPasswordPage');
+    }
+
 
 }

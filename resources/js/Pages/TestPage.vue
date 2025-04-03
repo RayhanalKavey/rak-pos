@@ -1,10 +1,12 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import SideNavLayout from "../Layouts/SideNavLayout.vue";
 </script>
 
 <template>
-    <h1>Test</h1>
-    <Link href="/">Home</Link>
+    <SideNavLayout>
+        <Link href="/">Home</Link>
+    </SideNavLayout>
 </template>
 
 <style scoped></style>

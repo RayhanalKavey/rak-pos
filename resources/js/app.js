@@ -1,6 +1,10 @@
-import "./bootstrap";
 import { router } from "@inertiajs/vue3";
+import "./bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
+import "./Assets/css/fontawesome.css";
+import "./Assets/css/animate.min.css";
+import "./Assets/css/sidebar.css";
+import "./Assets/css/main.css";
 import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 import NProgress from "nprogress";
