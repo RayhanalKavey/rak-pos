@@ -3,16 +3,16 @@ import { useForm, usePage, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right" });
 
-const form = useForm({ password: "", cpassword: "" });
+const form = useForm({ password: "", confirm_password: "" });
 const page = usePage();
 
 function submit() {
     if (form.password.length === 0) {
         toaster.warning("Password is required");
-    } else if (form.cpassword.length === 0) {
+    } else if (form.confirm_password.length === 0) {
         toaster.warning("Confirm Password is required");
-    } else if (form.password !== form.cpassword) {
-        toaster.warning("Password and Confirm Password does not match");
+    } else if (form.password !== form.confirm_password) {
+        toaster.error("Passwords do not match");
     } else {
         form.post("/reset-password", {
             onSuccess: () => {
@@ -47,8 +47,8 @@ function submit() {
                             <br />
                             <label>Confirm Password</label>
                             <input
-                                id="cpassword"
-                                v-model="form.cpassword"
+                                id="confirm_password"
+                                v-model="form.confirm_password"
                                 placeholder="Confirm Password"
                                 class="form-control"
                                 type="password"

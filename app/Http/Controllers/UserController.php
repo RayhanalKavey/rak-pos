@@ -122,38 +122,59 @@ class UserController extends Controller
     }
     public function verifyOTP(Request $request)
     {
-        $email = $request->input('email');
+        // $email = $request->input('email');
+        $email = $request->session()->get('email');
         $otp = $request->input('otp');
         $count = User::where('email', $email)->where('otp', hash('sha256', $otp))->count();
         if (1 == $count) {
             User::where('email', $email)->update([
                 'otp' => 0
             ]);
-            $token = JWTToken::createTokenForSetPassword($request->input('email'));
-
-            return response()->json([
-                'status' => true,
-                'message' => "OTP verified successfully!",
-            ], 200)->cookie('token', $token, 60 * 24 * 30);
+            // $token = JWTToken::createTokenForSetPassword($request->input('email'));
+            $request->session()->put('otp_verify', true);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => "OTP verification successful",
+            // ], 200)->cookie('token', $token, 60 * 24 * 30);
+            $data = ["message" => "OTP verification successful", "status" => true, "error" => ''];
+            return redirect('/reset-password')->with($data);
         } else {
-            return response()->json([
-                'status' => false,
-                'message' => "Unauthorized",
-            ], 403);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => "Unauthorized",
+            // ], 403);
+            User::where('email', $email)->update([
+                'otp' => 0
+            ]);
+            $data = ['message' => 'unauthorized', 'status' => false, 'error' => ''];
+            return redirect('/login')->with($data);
         }
     }
     public function resetPassword(Request $request)
     {
         try {
-            $email = $request->header('email');
+            // $email = $request->header('email');
+            $email = $request->session()->get('email', 'default');
+            $otp_verify = $request->session()->get('otp_verify', 'default');
             $password = $request->input('password');
-            User::where('email', $email)->update([
-                'password' => Hash::make($password)
-            ]);
-            return response()->json([
-                'status' => true,
-                'message' => "Password reset successful",
-            ], 200)->cookie('token', '', -1);
+
+
+            if ($otp_verify) {
+                User::where('email', $email)->update([
+                    'password' => Hash::make($password)
+                ]);
+                $request->session()->flush();
+                $data = ['message' => 'Password reset successfully', 'status' => true, 'error' => ''];
+                return redirect('/login')->with($data);
+            } else {
+                $data = ['message' => 'Request failed', 'status' => false, 'error' => ''];
+                return redirect('/reset-password')->with($data);
+            }
+
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => "Password reset successful",
+            // ], 200)->cookie('token', '', -1);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
