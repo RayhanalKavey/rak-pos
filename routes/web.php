@@ -43,6 +43,7 @@ Route::get('/test', [TestController::class, 'test']);
 
 
 /* ------ Logged in routes ------ */
+// Route::middleware(TokenVerificationMiddleware::class)->group(function () {
 Route::middleware(SessionAuthentication::class)->group(function () {
     /* ------- Page routes ------ */
     Route::get('/dashboard', [DashboardController::class, 'DashboardPage'])->name('dashboard.page');
@@ -50,7 +51,7 @@ Route::middleware(SessionAuthentication::class)->group(function () {
 
 
     // Auth routes
-    Route::post('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
+    Route::get('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
     Route::post('/reset-password', [UserController::class, 'resetPassword'])->name('resetPassword');
 
     /* --- Category CRUD routes ---*/

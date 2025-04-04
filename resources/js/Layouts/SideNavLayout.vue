@@ -24,7 +24,7 @@ import { Link } from "@inertiajs/vue3";
                 />
             </div>
 
-            <Link href="/DashboardPage" class="side-bar-item">
+            <Link href="/dashboard" class="side-bar-item">
                 <span class="side-bar-item-icon"
                     ><i class="fa fa-tachometer-alt text-green"
                 /></span>

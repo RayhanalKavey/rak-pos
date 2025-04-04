@@ -1,9 +1,16 @@
 <script setup>
 import { Link, useForm, usePage, router } from "@inertiajs/vue3";
 import { createToaster } from "@meforma/vue-toaster";
-const toaster = createToaster();
+const toaster = createToaster({ position: "top-right" });
 
-const form = useForm({ name: "", email: "", mobile: "", password: "" });
+const form = useForm({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirm_password: "",
+});
+
 const page = usePage();
 
 function submit() {
@@ -15,12 +22,15 @@ function submit() {
         toaster.warning("Mobile is required");
     } else if (form.password.length === 0) {
         toaster.warning("Password is required");
+    } else if (form.confirm_password.length === 0) {
+        toaster.warning("Confirm Password is required");
+    } else if (form.password !== form.confirm_password) {
+        toaster.error("Passwords do not match");
     } else {
         form.post("/user-registration", {
             onSuccess: () => {
                 if (page.props.flash.status === true) {
-                    router.get("/DashboardPage");
-                    toaster.success("Login successful");
+                    toaster.success(page.props.flash.message);
                 } else {
                     toaster.error(page.props.flash.message);
                 }
@@ -70,9 +80,10 @@ function submit() {
                                             v-model="form.mobile"
                                             placeholder="Mobile"
                                             class="form-control"
-                                            type="mobile"
+                                            type="text"
                                         />
                                     </div>
+
                                     <div class="col-md-4 p-2">
                                         <label>Password</label>
                                         <input
@@ -83,11 +94,13 @@ function submit() {
                                             type="password"
                                         />
                                     </div>
+
                                     <div class="col-md-4 p-2">
                                         <label>Confirm Password</label>
                                         <input
-                                            id="cpassword"
-                                            placeholder="User Confirm Password"
+                                            id="confirm_password"
+                                            v-model="form.confirm_password"
+                                            placeholder="Confirm Password"
                                             class="form-control"
                                             type="password"
                                         />
@@ -97,7 +110,6 @@ function submit() {
                                     <div class="col-md-4 p-2">
                                         <button
                                             type="submit"
-                                            href="loginForm.html"
                                             class="btn mt-3 w-100 btn-success"
                                         >
                                             Complete

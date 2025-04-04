@@ -29,16 +29,21 @@ class UserController extends Controller
                 "email" => $request->input('email'),
                 "password" => $request->input('password')
             ]);
-            return response()->json([
-                'status' => true,
-                'message' => 'User created successfully!',
-                'data' => $user
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'User created successfully!',
+            //     'data' => $user
+            // ]);
+            $data = ['message' => 'Registration successful', 'status' => true, 'error' => ''];
+            return redirect('/login')->with($data);
+
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage()
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage()
+            // ]);
+            $data = ['message' => 'Something went wrong', 'status' => false, 'error' => ''];
+            return redirect('/registration')->with($data);
         }
     }
     public function userLogin(Request $request)
@@ -70,10 +75,20 @@ class UserController extends Controller
     }
     public function userLogout(Request $request)
     {
-        return response()->json([
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'User logout successfully!',
+        // ], 200)->cookie('token', '', -1);
+        $request->session()->forget('email');
+        $request->session()->forget('user_id');
+        // Completely clear the session
+        // $request->session()->flush();
+
+        return redirect('/login')->with([
+            'message' => 'User logged out successfully',
             'status' => true,
-            'message' => 'User logout successfully!',
-        ], 200)->cookie('token', '', -1);
+            'error' => ''
+        ]);
     }
     public function sendOTP(Request $request)
     {
@@ -83,20 +98,26 @@ class UserController extends Controller
         $expiration = now()->addMinutes(5);
         if (1 == $count) {
 
-            Mail::to($email)->queue(new OTPMail($otp, $expiration));
-            // Mail::to($email)->send(new OTPMail($otp, $expiration));
+            // Mail::to($email)->queue(new OTPMail($otp, $expiration)); ********
+            // Mail::to($email)->send(new OTPMail($otp, $expiration));//alternative
             User::where('email', $email)->update([
                 'otp' => hash('sha256', $otp)//bcrypt($otp)// 'otp' => $otp
             ]);
-            return response()->json([
-                'status' => true,
-                'message' => "6-digit OTP {$otp} sent successfully!",
-            ], 200);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => "6-digit OTP {$otp} sent successfully!",
+            // ], 200);
+            $request->session()->put('email', $email);
+            // $data = ["message" => "Visit your mail to get the OTP", "status" => true, "error" => ''];
+            $data = ["message" => "4 Digit {$otp} OTP send successfully", "status" => true, "error" => ''];
+            return redirect('/verify-otp')->with($data);
         } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'unauthorized',
-            ], 403);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => 'unauthorized',
+            // ], 403);
+            $data = ['message' => 'unauthorized', 'status' => false, 'error' => ''];
+            return redirect('/registration')->with($data);
         }
     }
     public function verifyOTP(Request $request)

@@ -13,7 +13,7 @@ function submit() {
         form.post("/send-otp", {
             onSuccess: () => {
                 if (page.props.flash.status === true) {
-                    router.get("/verify-otp");
+                    // router.get("/verify-otp");
                     toaster.success(page.props.flash.message);
                 } else {
                     toaster.error(page.props.flash.message);
