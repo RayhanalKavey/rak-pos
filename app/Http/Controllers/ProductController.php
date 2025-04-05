@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -37,16 +39,20 @@ class ProductController extends Controller
             $product = Product::create(
                 $data
             );
-            return response()->json([
-                'status' => true,
-                'message' => 'product created successfully',
-                'product' => $product
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'product created successfully',
+            //     'product' => $product
+            // ]);
+            $data = ['message' => 'Product created successfully', 'status' => true, 'error' => ''];
+            return redirect('/ProductPage')->with($data);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => ''];
+            return redirect('/ProductPage')->with($data);
         }
     }
 
@@ -96,39 +102,65 @@ class ProductController extends Controller
             }
             $product->save();
 
-            return response()->json([
-                'status' => true,
-                'message' => 'product updated successfully',
-                // 'product' => $product
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'product updated successfully',
+            //     // 'product' => $product
+            // ]);
+            $data = ['message' => 'Product updated successfully', 'status' => true, 'error' => ''];
+            return redirect('/ProductPage')->with($data);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => ''];
+            return redirect('/ProductPage')->with($data);
         }
     }
     public function deleteProduct(Request $request, $id)
     {
         try {
-            $user_id = $request->header('id');
+            // $user_id = $request->header('id');
             // $product = Product::where('user_id', $user_id)->where('id', $id)->first();
-            $product = Product::where('user_id', $user_id)->findOrFail($id);
+            // $product = Product::where('user_id', $user_id)->findOrFail($id);
+            $product = Product::findOrFail($id);
 
             if ($product->image && file_exists(public_path($product->image))) {
                 unlink(public_path($product->image));
             }
             $product->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'product deleted successfully'
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'product deleted successfully'
+            // ]);
+            $data = ['message' => 'Product Deleted successfully', 'status' => true, 'error' => ''];
+            return redirect()->back()->with($data);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => $e->getMessage()];
+            return redirect()->back()->with($data);
         }
     }
+    public function ProductPage(Request $request)
+    {
+        $user_id = $request->header('id');
+        $products = Product::where('user_id', $user_id)
+            ->with('category')->latest()->get();
+        return Inertia::render('ProductPage', ['products' => $products]);
+    }//end method
+
+    public function ProductSavePage(Request $request)
+    {
+
+        $user_id = $request->header('id');
+        $product_id = $request->query('id');
+        $product = Product::where('id', $product_id)->where('user_id', $user_id)->first();
+        $categories = Category::where('user_id', $user_id)->get();
+        return Inertia::render('ProductSavePage', ['product' => $product, 'categories' => $categories]);
+    }//end method
 
 }

@@ -72,7 +72,7 @@ const DeleteClick = (id) => {
                                 alternating
                                 :headers="Header"
                                 :items="Item"
-                                :rows-per-page="2"
+                                :rows-per-page="10"
                                 :search-field="searchField"
                                 :search-value="searchValue"
                                 show-index

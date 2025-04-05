@@ -54,6 +54,11 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     // Customer
     Route::get('/customer', [CustomerController::class, 'CustomerPage'])->name('customer.page');
     Route::get('/customer-save', [CustomerController::class, 'customerSavePage'])->name('customer-save.page');
+    // Product
+    Route::get('/ProductPage', [ProductController::class, 'ProductPage'])->name('product.page');
+    Route::get('/ProductSavePage', [ProductController::class, 'ProductSavePage'])->name('ProductSavePage');
+
+
 
     // Auth routes
     Route::get('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
