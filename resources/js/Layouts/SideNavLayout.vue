@@ -31,14 +31,14 @@ import { Link } from "@inertiajs/vue3";
                 <span class="side-bar-item-caption">Dashboard</span>
             </Link>
 
-            <Link href="/CategoryPage" class="side-bar-item">
+            <Link href="/category" class="side-bar-item">
                 <span class="side-bar-item-icon"
                     ><i class="fa fa-th-list text-green"
                 /></span>
                 <span class="side-bar-item-caption">Category</span>
             </Link>
 
-            <Link href="/CustomerPage" class="side-bar-item">
+            <Link href="/customer" class="side-bar-item">
                 <span class="side-bar-item-icon"
                     ><i class="fa fa-users text-green"
                 /></span>

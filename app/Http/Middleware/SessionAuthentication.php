@@ -19,7 +19,7 @@ class SessionAuthentication
         $user_id = $request->session()->get('user_id', 'default');
         $last_activity = $request->session()->get('last_activity', time());
 
-        $session_timeout = 1800; // 30 minutes timeout
+        $session_timeout = 3600; // 60 minutes timeout
 
         // Check if session has expired
         if (time() - $last_activity > $session_timeout) {

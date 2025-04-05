@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Helper\JWTToken;
+// use App\Helper\JWTToken;
 use App\Mail\OTPMail;
 use App\Models\User;
 use Exception;
@@ -98,7 +97,7 @@ class UserController extends Controller
         $expiration = now()->addMinutes(5);
         if (1 == $count) {
 
-            // Mail::to($email)->queue(new OTPMail($otp, $expiration)); ********
+            Mail::to($email)->queue(new OTPMail($otp, $expiration));
             // Mail::to($email)->send(new OTPMail($otp, $expiration));//alternative
             User::where('email', $email)->update([
                 'otp' => hash('sha256', $otp)//bcrypt($otp)// 'otp' => $otp
@@ -107,9 +106,10 @@ class UserController extends Controller
             //     'status' => true,
             //     'message' => "6-digit OTP {$otp} sent successfully!",
             // ], 200);
+
             $request->session()->put('email', $email);
-            // $data = ["message" => "Visit your mail to get the OTP", "status" => true, "error" => ''];
-            $data = ["message" => "4 Digit {$otp} OTP send successfully", "status" => true, "error" => ''];
+            $data = ["message" => "Visit your mail to get the OTP", "status" => true, "error" => ''];
+            // $data = ["message" => "4 Digit {$otp} OTP send successfully", "status" => true, "error" => ''];
             return redirect('/verify-otp')->with($data);
         } else {
             // return response()->json([
@@ -131,7 +131,7 @@ class UserController extends Controller
                 'otp' => 0
             ]);
             // $token = JWTToken::createTokenForSetPassword($request->input('email'));
-            $request->session()->put('otp_verify', true);
+            $request->session()->put('otp_verify', 'Y');
             // return response()->json([
             //     'status' => true,
             //     'message' => "OTP verification successful",
@@ -143,9 +143,11 @@ class UserController extends Controller
             //     'status' => false,
             //     'message' => "Unauthorized",
             // ], 403);
+
             User::where('email', $email)->update([
                 'otp' => 0
             ]);
+
             $data = ['message' => 'unauthorized', 'status' => false, 'error' => ''];
             return redirect('/login')->with($data);
         }
@@ -159,7 +161,7 @@ class UserController extends Controller
             $password = $request->input('password');
 
 
-            if ($otp_verify) {
+            if ($otp_verify === 'Y') {
                 User::where('email', $email)->update([
                     'password' => Hash::make($password)
                 ]);
@@ -208,6 +210,8 @@ class UserController extends Controller
     {
         return Inertia::render('ResetPasswordPage');
     }
+
+
 
 
 }

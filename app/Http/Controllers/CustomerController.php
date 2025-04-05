@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Exception;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
+    public function CustomerPage(Request $request)
+    {
+        $user_id = $request->header('id');
+        $customers = Customer::where('user_id', $user_id)->get();
+        return Inertia::render('CustomerPage', ['customers' => $customers]);
+    }
     public function createCustomer(Request $request)
     {
         try {

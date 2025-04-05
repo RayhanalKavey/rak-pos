@@ -47,7 +47,11 @@ Route::get('/test', [TestController::class, 'test']);
 Route::middleware(SessionAuthentication::class)->group(function () {
     /* ------- Page routes ------ */
     Route::get('/dashboard', [DashboardController::class, 'DashboardPage'])->name('dashboard.page');
-    Route::get('/reset-password', [UserController::class, 'resetPasswordPage'])->name('resetPassword.page');
+    Route::get('/reset-password', [UserController::class, 'resetPasswordPage'])->name('reset-password.page');
+    Route::get('/category', [CategoryController::class, 'categoryPage'])->name('category.page');
+    Route::get('/category-save', [CategoryController::class, 'CategorySavePage'])->name('category-save.page');
+
+    Route::get('/customer', [CustomerController::class, 'CustomerPage'])->name('customer.page');
 
 
     // Auth routes
