@@ -1,12 +1,9 @@
 <script setup>
-import CustomerList from "../Components/Customer/CustomerList.vue";
+import CustomerSaveForm from "../Components/Customer/CustomerSaveForm.vue";
 import SideNavLayout from "../Layouts/SideNavLayout.vue";
 </script>
-
 <template>
     <SideNavLayout>
-        <CustomerList />
+        <CustomerSaveForm />
     </SideNavLayout>
 </template>
-
-<style scoped></style>

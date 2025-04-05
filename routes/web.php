@@ -48,11 +48,12 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     /* ------- Page routes ------ */
     Route::get('/dashboard', [DashboardController::class, 'DashboardPage'])->name('dashboard.page');
     Route::get('/reset-password', [UserController::class, 'resetPasswordPage'])->name('reset-password.page');
+    // category
     Route::get('/category', [CategoryController::class, 'categoryPage'])->name('category.page');
     Route::get('/category-save', [CategoryController::class, 'CategorySavePage'])->name('category-save.page');
-
+    // Customer
     Route::get('/customer', [CustomerController::class, 'CustomerPage'])->name('customer.page');
-
+    Route::get('/customer-save', [CustomerController::class, 'customerSavePage'])->name('customer-save.page');
 
     // Auth routes
     Route::get('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');

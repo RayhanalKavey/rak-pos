@@ -30,16 +30,21 @@ class CustomerController extends Controller
                 'mobile' => $request->input('mobile'),
                 'user_id' => $user_id,
             ]);
-            return response()->json([
-                'status' => true,
-                'message' => 'Category created successfully',
-                'category' => $customer,
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'Category created successfully',
+            //     'category' => $customer,
+            // ]);
+            $data = ['message' => 'Customer created successfully', 'status' => true, 'error' => ''];
+            return redirect('/customer')->with($data);
+
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => ''];
+            return redirect('/customer')->with($data);
         }
     }
     public function listCustomer(Request $request)
@@ -81,16 +86,20 @@ class CustomerController extends Controller
 
 
             $customer->save();
-            return response()->json([
-                'status' => true,
-                'message' => 'customer updated successfully'
-                // 'categories' => Category::where('id', $id)->get(),
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'customer updated successfully'
+            //     // 'categories' => Category::where('id', $id)->get(),
+            // ]);
+            $data = ['message' => 'Customer updated successfully', 'status' => true, 'error' => ''];
+            return redirect('/customer')->with($data);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => ''];
+            return redirect('/customer')->with($data);
         }
     }
     public function deleteCustomer(Request $request, $id)
@@ -98,15 +107,26 @@ class CustomerController extends Controller
         try {
             $user_id = $request->header('id');
             Customer::where('user_id', $user_id)->where('id', $id)->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'customer deleted successfully'
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'customer deleted successfully'
+            // ]);
+            $data = ['message' => 'Customer Deleted successfully', 'status' => true, 'error' => ''];
+            return redirect('/customer')->with($data);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => $e->getMessage(), 'status' => false, 'error' => ''];
+            return redirect('/customer')->with($data);
         }
+    }
+    public function customerSavePage(Request $request)
+    {
+        $user_id = $request->header('id');
+        $id = $request->query('id');
+        $customer = Customer::where('id', $id)->where('user_id', $user_id)->first();
+        return Inertia::render('CustomerSavePage', ['customer' => $customer]);
     }
 }
