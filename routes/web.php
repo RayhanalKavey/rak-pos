@@ -60,7 +60,9 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     Route::get('/ProductSavePage', [ProductController::class, 'ProductSavePage'])->name('ProductSavePage');
     // Invoice
     Route::get('/InvoiceListPage', [InvoiceController::class, 'InvoiceListPage'])->name('InvoiceListPage');
-
+    //Profile
+    Route::get('/ProfilePage', [UserController::class, 'ProfilePage']);
+    Route::post('/user-update', [UserController::class, 'UserUpdate']);
 
     // Auth routes
     Route::get('/user-logout', [UserController::class, 'userLogout'])->name('user.logout');
@@ -92,6 +94,7 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     Route::get('/list-invoice', [InvoiceController::class, 'listInvoice'])->name('invoice.list');//R
     Route::post('/invoice-details', [InvoiceController::class, 'invoiceById'])->name('invoice.ById');//invoiceById
     Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'deleteInvoice'])->name('invoice.delete');//D
+
 
     /* --- sale route ---*/
     Route::get('/create-sale', [SaleController::class, 'SalePage'])->name('SalePage');

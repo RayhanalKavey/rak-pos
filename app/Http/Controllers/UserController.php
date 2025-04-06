@@ -210,6 +210,25 @@ class UserController extends Controller
     {
         return Inertia::render('ResetPasswordPage');
     }
+    public function ProfilePage(Request $request)
+    {
+        $email = request()->header('email');
+
+        $user = User::where('email', $email)->first();
+        return Inertia::render('ProfilePage', ['user' => $user]);
+    }//end method
+
+    public function UserUpdate(Request $request)
+    {
+        $email = request()->header('email');
+        User::where('email', $email)->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'mobile' => $request->input('mobile'),
+        ]);
+        $data = ['message' => 'Profile update successfully', 'status' => true, 'error' => ''];
+        return redirect()->back()->with($data);
+    }
 
 
 
