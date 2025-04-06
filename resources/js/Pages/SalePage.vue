@@ -1,9 +1,9 @@
 <script setup>
-import SummaryView from "../Components/Dashboard/SummaryView.vue";
+import CreateSalePage from "../Components/Sale/CreateSalePage.vue";
 import SideNavLayout from "../Layouts/SideNavLayout.vue";
 </script>
 <template>
     <SideNavLayout>
-        <SummaryView />
+        <CreateSalePage />
     </SideNavLayout>
 </template>

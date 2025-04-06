@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-      protected $fillable=[
+    protected $fillable = [
         'total',
         'discount',
         'vat',
@@ -14,13 +14,16 @@ class Invoice extends Model
         'user_id',
         'customer_id'
     ];
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function customer(){
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
     }
-    public function invoice_product(){
+    public function invoiceProduct()
+    {
         return $this->hasMany(InvoiceProduct::class);
     }
 }

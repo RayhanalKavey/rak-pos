@@ -9,9 +9,17 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class InvoiceController extends Controller
 {
+    public function InvoiceListPage(Request $request)
+    {
+        $user_id = $request->header('id');
+        $list = Invoice::where('user_id', $user_id)
+            ->with('customer', 'invoiceProduct.product')->get();
+        return Inertia::render('InvoiceListPage', ['list' => $list]);
+    }
     public function createInvoice(Request $request)
     {
         // dd($request->all());
@@ -57,17 +65,21 @@ class InvoiceController extends Controller
             }
 
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'invoice created successfully',
-                'category' => $invoice,
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'invoice created successfully',
+            //     'category' => $invoice,
+            // ]);
+            $data = ['message' => 'Invoice created successfully', 'status' => true, 'error' => ''];
+            return redirect('/InvoiceListPage')->with($data);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => 'Something went wrong', 'status' => false, 'error' => $e->getMessage()];
+            return redirect()->back()->with($data);
         }
     }
     public function listInvoice(Request $request)
@@ -75,11 +87,12 @@ class InvoiceController extends Controller
         try {
             $user_id = $request->header('id');
             $invoices = Invoice::with('customer')->where('user_id', $user_id)->get();
-            return response()->json([
-                'status' => true,
-                'message' => 'get invoices successfully',
-                'invoices' => $invoices,
-            ]);
+            return $invoices;
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'get invoices successfully',
+            //     'invoices' => $invoices,
+            // ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
@@ -113,19 +126,39 @@ class InvoiceController extends Controller
             Invoice::where('user_id', $user_id)->where('id', $id)->delete();
 
             DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'invoice deleted successfully',
-                // 'category' => $invoice,
-            ]);
-
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'invoice deleted successfully',
+            //     // 'category' => $invoice,
+            // ]);
+            $data = ['message' => 'Invoice deleted successfully', 'status' => true, 'error' => ''];
+            return redirect()->back()->with($data);
         } catch (Exception $e) {
             DB::rollback();
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ]);
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => $e->getMessage(),
+            // ]);
+            $data = ['message' => 'Something went wrong', 'status' => false, 'error' => $e->getMessage()];
+            return redirect()->back()->with($data);
         }
 
+    }
+    public function InvoiceDetails(Request $request)
+    {
+        $user_id = request()->header('id');
+
+        $customerDetails = Customer::where('user_id', $user_id)->where('id', $request->customer_id)->first();
+
+        $invoiceDetails = Invoice::where('user_id', $user_id)->where('id', $request->invoice_id)->first();
+        $invoiceProduct = InvoiceProduct::where('invoice_id', $request->invoice_id)
+            ->where('user_id', $user_id)->with('product')
+            ->get();
+
+        return [
+            'customer' => $customerDetails,
+            'invoice' => $invoiceDetails,
+            'product' => $invoiceProduct
+        ];
     }
 }

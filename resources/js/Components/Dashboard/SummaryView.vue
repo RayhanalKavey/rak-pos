@@ -1,3 +1,10 @@
+<script setup>
+import { usePage } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+const page = usePage();
+const summary = ref(page.props.list);
+console.log(summary);
+</script>
 <template>
     <div class="container-fluid">
         <div class="row">
@@ -13,7 +20,7 @@
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
                                         <span id="product">{{
-                                            cummary["product"]
+                                            summary["product"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Product</p>
@@ -49,7 +56,7 @@
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
                                         <span id="product">{{
-                                            cummary["category"]
+                                            summary["category"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Category</p>
@@ -85,7 +92,7 @@
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
                                         <span id="product">{{
-                                            cummary["customer"]
+                                            summary["customer"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Customer</p>
@@ -121,7 +128,7 @@
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
                                         <span id="product">{{
-                                            cummary["invoice"]
+                                            summary["invoice"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Invoice</p>
@@ -158,7 +165,7 @@
                                     >
                                         $
                                         <span id="product">{{
-                                            cummary["total"]
+                                            summary["total"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Total Sale</p>
@@ -195,7 +202,7 @@
                                     >
                                         $
                                         <span id="product">{{
-                                            cummary["vat"]
+                                            summary["vat"]
                                         }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Vat Collection</p>
@@ -230,7 +237,7 @@
                                     <h5
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
-                                        $ <span>{{ cummary["payable"] }}</span>
+                                        $ <span>{{ summary["payable"] }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Total Payable</p>
                                 </div>
@@ -264,7 +271,7 @@
                                     <h5
                                         class="mb-0 text-capitalize font-weight-bold"
                                     >
-                                        $ <span>{{ cummary["discount"] }}</span>
+                                        $ <span>{{ summary["discount"] }}</span>
                                     </h5>
                                     <p class="mb-0 text-sm">Total Discount</p>
                                 </div>
@@ -289,9 +296,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { usePage } from "@inertiajs/vue3";
-const page = usePage();
-const cummary = page.props.list;
-</script>

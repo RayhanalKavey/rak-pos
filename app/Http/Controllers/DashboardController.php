@@ -11,9 +11,35 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    // public function DashboardPage(Request $request)
+    // {
+    //     return Inertia::render('DashboardPage');
+    // }
     public function DashboardPage(Request $request)
     {
-        return Inertia::render('DashboardPage');
+        $user_id = request()->header('id');
+
+        $product = Product::where('user_id', $user_id)->count();
+        $category = Category::where('user_id', $user_id)->count();
+        $customer = Customer::where('user_id', $user_id)->count();
+        $invoice = Invoice::where('user_id', $user_id)->count();
+        $total = Invoice::where('user_id', $user_id)->sum('total');
+        $vat = Invoice::where('user_id', $user_id)->sum('vat');
+        $payable = Invoice::where('user_id', $user_id)->sum('payable');
+        $discount = Invoice::where('user_id', $user_id)->sum('discount');
+
+        $data = [
+            'product' => $product,
+            'category' => $category,
+            'customer' => $customer,
+            'invoice' => $invoice,
+            'total' => round($total),
+            'vat' => round($vat),
+            'payable' => round($payable),
+            'discount' => $discount
+        ];
+
+        return Inertia::render('DashboardPage', ['list' => $data]);
     }
     public function dashboardSummary(Request $request)
     {
@@ -28,8 +54,7 @@ class DashboardController extends Controller
         $vat = Invoice::where('user_id', $user_id)->sum('vat');
         $payable = Invoice::where('user_id', $user_id)->sum('payable');
         $discount = Invoice::where('user_id', $user_id)->sum('discount');
-
-        return response()->json([
+        $list = [
             "product" => $product,
             'category' => $category,
             "customer" => $customer,
@@ -38,7 +63,18 @@ class DashboardController extends Controller
             "vat" => $vat,
             "payable" => $payable,
             "discount" => $discount
-        ]);
+        ];
+        return Inertia::render('DashboardPage', ['list' => $list]);
+        // return response()->json([
+        //     "product" => $product,
+        //     'category' => $category,
+        //     "customer" => $customer,
+        //     "invoice" => $invoice,
+        //     "total" => $total,
+        //     "vat" => $vat,
+        //     "payable" => $payable,
+        //     "discount" => $discount
+        // ]);
 
     }
 

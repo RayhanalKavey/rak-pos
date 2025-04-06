@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\SessionAuthentication;
@@ -57,7 +58,8 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     // Product
     Route::get('/ProductPage', [ProductController::class, 'ProductPage'])->name('product.page');
     Route::get('/ProductSavePage', [ProductController::class, 'ProductSavePage'])->name('ProductSavePage');
-
+    // Invoice
+    Route::get('/InvoiceListPage', [InvoiceController::class, 'InvoiceListPage'])->name('InvoiceListPage');
 
 
     // Auth routes
@@ -90,6 +92,9 @@ Route::middleware(SessionAuthentication::class)->group(function () {
     Route::get('/list-invoice', [InvoiceController::class, 'listInvoice'])->name('invoice.list');//R
     Route::post('/invoice-details', [InvoiceController::class, 'invoiceById'])->name('invoice.ById');//invoiceById
     Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'deleteInvoice'])->name('invoice.delete');//D
+
+    /* --- sale route ---*/
+    Route::get('/create-sale', [SaleController::class, 'SalePage'])->name('SalePage');
 
     /* --- Dashboard summary ---*/
     Route::get('/dashboard-summary', [DashboardController::class, 'dashboardSummary'])->name('dashboard.summary');
