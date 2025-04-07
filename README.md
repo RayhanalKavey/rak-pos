@@ -1,5 +1,9 @@
 # Point of Sale (POS) System
 
+## Demo Video
+
+[View Project Presentation Video](https://youtu.be/ZJ5UDZ13b1c)
+
 ## Project Overview
 
 This is a Point of Sale (POS) system built with Laravel 12, Vue 3, and Inertia.js. The system provides a seamless sales management solution with category and product management, customer and invoice handling, sales reporting, and analytics. It also includes JWT authentication and OTP-based password reset functionalities.
@@ -77,10 +81,6 @@ This is a Point of Sale (POS) system built with Laravel 12, Vue 3, and Inertia.j
 ## GitHub Repository
 
 [Project Repository](https://github.com/RayhanalKavey/rak-pos)
-
-<!-- ## Demo Video
-
-[View Project Presentation Video](#) -->
 
 ---
 
